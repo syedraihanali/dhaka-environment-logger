@@ -2,8 +2,11 @@ name: Dhaka Environment Logger
 
 on:
   schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch:   
+    - cron: "0 * * * *"   # runs every hour
+  workflow_dispatch:       # allow manual trigger
+
+permissions:
+  contents: write          # ✅ allows pushing commits to the repo
 
 jobs:
   log-environment:
@@ -28,9 +31,11 @@ jobs:
         run: python environment_logger.py
 
       - name: Commit & Push changes
+        env:
+          GIT_AUTH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}   # ✅ your personal token secret
         run: |
           git config --global user.name "syedraihanali"
           git config --global user.email "syedraihanali65@gmail.com"
           git add data/
           git commit -m "Dhaka environment update: $(date -u '+%Y-%m-%d %H:%M UTC')" || echo "No changes to commit"
-          git push
+          git push https://syedraihanali:${GIT_AUTH_TOKEN}@github.com/syedraihanali/dhaka-environment-logger.git HEAD:main
