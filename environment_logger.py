@@ -14,13 +14,13 @@ LAT, LON = 23.833435976686932, 90.42756821593022  # Coordinates for Dhaka
 dhaka_tz = pytz.timezone("Asia/Dhaka")
 local_now = datetime.datetime.now(dhaka_tz)
 month_tag = local_now.strftime("%Y_%m")
-timestamp = local_now.strftime("%Y-%m-%d %I:%M:%S %p %Z") 
+timestamp = local_now.strftime("%Y-%m-%d %I:%M:%S %p BDT")
 
 os.makedirs("data/json", exist_ok=True)
 os.makedirs("data/csv", exist_ok=True)
 
-json_file = f"data/json/dhaka_environment_{month_tag}.json"
-csv_file = f"data/csv/dhaka_environment_{month_tag}.csv"
+json_file = f"data/json/environment_{month_tag}.json"
+csv_file = f"data/csv/environment_{month_tag}.csv"
 
 weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LON}&appid={API_KEY_WEATHER}&units=metric"
 weather = requests.get(weather_url).json()
@@ -49,9 +49,19 @@ entry = {
     "air_aqi": air["list"][0]["main"]["aqi"],
     "uv_index": uv["result"]["uv"]
 }
+if os.path.exists(json_file) and os.path.getsize(json_file) > 0:
+    with open(json_file, "r") as jf:
+        try:
+            data = json.load(jf)
+        except json.JSONDecodeError:
+            data = []
+else:
+    data = []
 
-with open(json_file, "a") as jf:
-    jf.write(json.dumps(entry) + "\n")
+data.append(entry)
+
+with open(json_file, "w") as jf:
+    json.dump(data, jf, indent=2)
 
 file_exists = os.path.isfile(csv_file)
 with open(csv_file, "a", newline="") as cf:
