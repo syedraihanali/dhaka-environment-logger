@@ -1,0 +1,36 @@
+name: Dhaka Environment Logger
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:   
+
+jobs:
+  log-environment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run environment logger
+        env:
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+          OPENUV_API_KEY: ${{ secrets.OPENUV_API_KEY }}
+        run: python environment_logger.py
+
+      - name: Commit & Push changes
+        run: |
+          git config --global user.name "syedraihanali"
+          git config --global user.email "syedraihanali65@gmail.com"
+          git add data/
+          git commit -m "Dhaka environment update: $(date -u '+%Y-%m-%d %H:%M UTC')" || echo "No changes to commit"
+          git push
