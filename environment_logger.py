@@ -9,7 +9,7 @@ API_KEY_WEATHER = os.getenv("OPENWEATHER_API_KEY")
 API_KEY_UV = os.getenv("OPENUV_API_KEY")
 CITY = "Dhaka"
 COUNTRY = "BD"
-LAT, LON = 23.833435976686932, 90.42756821593022
+LAT, LON = 23.833435976686932, 90.42756821593022 # Coordinates for Dhaka
 
 dhaka_tz = pytz.timezone("Asia/Dhaka")
 local_now = datetime.datetime.now(dhaka_tz)
