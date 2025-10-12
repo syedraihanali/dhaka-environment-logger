@@ -3,17 +3,22 @@ import requests
 import datetime
 import json
 import csv
+import pytz
 
 API_KEY_WEATHER = os.getenv("OPENWEATHER_API_KEY")
 API_KEY_UV = os.getenv("OPENUV_API_KEY")
 CITY = "Dhaka"
 COUNTRY = "BD"
-LAT, LON = 23.833435976686932, 90.42756821593022 # Coordinates for Dhaka
+LAT, LON = 23.833435976686932, 90.42756821593022
+
+dhaka_tz = pytz.timezone("Asia/Dhaka")
+local_now = datetime.datetime.now(dhaka_tz)
+month_tag = local_now.strftime("%Y_%m")
+timestamp = local_now.strftime("%Y-%m-%d %H:%M:%S %Z")
 
 os.makedirs("data/json", exist_ok=True)
 os.makedirs("data/csv", exist_ok=True)
 
-month_tag = datetime.date.today().strftime("%Y_%m")
 json_file = f"data/json/environment_{month_tag}.json"
 csv_file = f"data/csv/environment_{month_tag}.csv"
 
@@ -29,7 +34,7 @@ uv_url = f"https://api.openuv.io/api/v1/uv?lat={LAT}&lng={LON}"
 uv = requests.get(uv_url, headers=headers).json()
 
 entry = {
-    "time": datetime.datetime.utcnow().isoformat(),
+    "time_local": timestamp,
     "city": f"{CITY}, {COUNTRY}",
     "temp_c": weather["main"]["temp"],
     "humidity": weather["main"]["humidity"],
@@ -55,4 +60,4 @@ with open(csv_file, "a", newline="") as cf:
         writer.writeheader()
     writer.writerow(entry)
 
-print("✅ Logged Dhaka environment data:", entry)
+print("✅ Logged Dhaka environment data (local time):", timestamp)
