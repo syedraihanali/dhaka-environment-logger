@@ -2,7 +2,7 @@ name: Dhaka Environment Logger
 
 on:
   schedule:
-    - cron: "0 * * * *"   # runs every hour
+    - cron: "*/5 * * * *"
   workflow_dispatch:       # allow manual trigger
 
 permissions:
