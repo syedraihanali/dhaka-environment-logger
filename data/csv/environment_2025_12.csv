@@ -1,0 +1,2 @@
+time_local,city,temp_c,humidity,pressure,weather,wind_speed,air_pm2_5,air_pm10,air_co,air_no2,air_o3,air_aqi,uv_index
+2025-12-01 12:20:45 AM BDT,"Dhaka, BD",21.02,78,1014,mist,1.54,110.23,130.23,730.64,16.68,31.17,5,0
