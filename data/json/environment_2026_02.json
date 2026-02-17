@@ -5342,5 +5342,21 @@
     "air_o3": 25.57,
     "air_aqi": 5,
     "uv_index": 0
+  },
+  {
+    "time_local": "2026-02-18 03:30:58 AM BDT",
+    "city": "Dhaka, BD",
+    "temp_c": 21.02,
+    "humidity": 73,
+    "pressure": 1012,
+    "weather": "haze",
+    "wind_speed": 0,
+    "air_pm2_5": 128.58,
+    "air_pm10": 147.61,
+    "air_co": 759.51,
+    "air_no2": 10.99,
+    "air_o3": 22.9,
+    "air_aqi": 5,
+    "uv_index": 0
   }
 ]
