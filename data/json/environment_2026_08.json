@@ -1,0 +1,18 @@
+[
+  {
+    "time_local": "2026-08-01 01:16:11 AM BDT",
+    "city": "Dhaka, BD",
+    "temp_c": 26.55,
+    "humidity": 88,
+    "pressure": 1004,
+    "weather": "overcast clouds",
+    "wind_speed": 3.19,
+    "air_pm2_5": 9.28,
+    "air_pm10": 13.45,
+    "air_co": 135.3,
+    "air_no2": 3.05,
+    "air_o3": 38.13,
+    "air_aqi": 1,
+    "uv_index": 0
+  }
+]
