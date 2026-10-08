@@ -33,3 +33,4 @@ time_local,city,temp_c,humidity,pressure,weather,wind_speed,air_pm2_5,air_pm10,a
 2026-10-07 02:26:31 PM BDT,"Dhaka, BD",33.02,55,1013,few clouds,0,64.53,84.01,186.29,1.04,111.86,4,4.9369
 2026-10-07 10:01:08 PM BDT,"Dhaka, BD",27.02,74,1015,scattered clouds,0,79.18,103.23,361.17,9.18,30.9,5,0
 2026-10-08 03:43:44 AM BDT,"Dhaka, BD",26.02,89,1014,light rain,0,93.63,120.2,399.23,6.71,10.12,5,0
+2026-10-08 07:30:38 AM BDT,"Dhaka, BD",27.02,89,1016,clear sky,0,103,131.24,478.8,7.11,8.33,5,1.1445
