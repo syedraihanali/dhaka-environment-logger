@@ -22,16 +22,37 @@ os.makedirs("data/csv", exist_ok=True)
 json_file = f"data/json/environment_{month_tag}.json"
 csv_file = f"data/csv/environment_{month_tag}.csv"
 
-weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LON}&appid={API_KEY_WEATHER}&units=metric"
-weather = requests.get(weather_url).json()
+REQUEST_TIMEOUT = 10
 
-air_url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={LAT}&lon={LON}&appid={API_KEY_WEATHER}"
-air = requests.get(air_url).json()
+def _safe_get_json(url, headers=None):
+    """GET a URL and return JSON, or raise a RuntimeError with context on failure."""
+    try:
+        resp = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
+        resp.raise_for_status()
+        return resp.json()
+    except requests.exceptions.Timeout:
+        raise RuntimeError(f"Request timed out after {REQUEST_TIMEOUT}s: {url}")
+    except requests.exceptions.HTTPError as e:
+        raise RuntimeError(f"HTTP {e.response.status_code} for {url}: {e.response.text[:200]}")
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"Request failed for {url}: {e}")
+    except ValueError as e:
+        raise RuntimeError(f"Invalid JSON response from {url}: {e}")
+
+weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LON}&appid={API_KEY_WEATHER}&units=metric"
+weather = _safe_get_json(weather_url)
+
+air_url = f"https://api.openweathermap.org/data/2.5/air_pollution?lat={LAT}&lon={LON}&appid={API_KEY_WEATHER}"
+air = _safe_get_json(air_url)
+if not air.get("list"):
+    raise RuntimeError(f"Unexpected air-pollution response (no 'list' key): {air}")
 air_values = air["list"][0]["components"]
 
 headers = {"x-access-token": API_KEY_UV}
 uv_url = f"https://api.openuv.io/api/v1/uv?lat={LAT}&lng={LON}"
-uv = requests.get(uv_url, headers=headers).json()
+uv = _safe_get_json(uv_url)
+if "result" not in uv or "uv" not in uv.get("result", {}):
+    raise RuntimeError(f"Unexpected UV response: {uv}")
 
 entry = {
     "time_local": timestamp,
